@@ -1,20 +1,22 @@
 import {
+  addMessageToStore,
   addNewConvoToStore,
   addOnlineUserToStore,
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
-  addMessageToStore,
+  sortMessagesFromStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
 
-const GET_CONVERSATIONS = "GET_CONVERSATIONS";
-const SET_MESSAGE = "SET_MESSAGE";
-const ADD_ONLINE_USER = "ADD_ONLINE_USER";
-const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
-const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
-const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_CONVERSATION = "ADD_CONVERSATION";
+const ADD_ONLINE_USER = "ADD_ONLINE_USER";
+const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
+const GET_CONVERSATIONS = "GET_CONVERSATIONS";
+const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
+const SET_MESSAGE = "SET_MESSAGE";
+const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
+const SORT_MESSAGES = "SORT_MESSAGES";
 
 // ACTION CREATORS
 
@@ -59,6 +61,12 @@ export const clearSearchedUsers = () => {
   };
 };
 
+export const sortMessages = () => {
+  return {
+    type: SORT_MESSAGES,
+  };
+}
+
 // add new conversation when sending a new message
 export const addConversation = (recipientId, newMessage) => {
   return {
@@ -91,6 +99,8 @@ const reducer = (state = [], action) => {
         action.payload.recipientId,
         action.payload.newMessage
       );
+    case SORT_MESSAGES:
+      return sortMessagesFromStore(state);
     default:
       return state;
   }
