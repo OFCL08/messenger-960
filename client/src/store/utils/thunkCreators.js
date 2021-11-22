@@ -5,7 +5,6 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
-  sortMessages,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -73,8 +72,13 @@ export const logout = (id) => async (dispatch) => {
 export const fetchConversations = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
-    dispatch(gotConversations(data));
-    dispatch(sortMessages());
+    const conversations = data.map((convo) => {
+      const convoCopy = { ...convo };
+      convoCopy.messages.sort((message, nextMessage) =>
+      Date.parse(message.createdAt) - Date.parse(nextMessage.createdAt));
+      return convoCopy;
+    });
+    dispatch(gotConversations(conversations));
   } catch (error) {
     console.error(error);
   }
