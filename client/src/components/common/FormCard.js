@@ -8,15 +8,12 @@ import {
   Typography
 } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   cardTitle: {
-    color: "#000",
-    font: "normal 600 26px/40px Open Sans"
-  },
-  forgotButton: {
-    color: "#3A8DFF",
-    font: "normal 600 12px/16px Open Sans",
-    textAlign: "center"
+    color: theme.palette.black,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSizeTitle,
+    fontWeight: theme.typography.fontWeightTitle,
   },
   formContainer: {
     alignItems: "flex-start",
@@ -24,10 +21,19 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     height: "80vh",
     paddingLeft: "11%",
-    justifyContent: "center"
+    justifyContent: "center",
+    "@media (max-width: 568px)": {
+      alignItems: "center",
+      display: "flex",
+      padding: "0",
+      width: "100vw"
+    },
   },
   inputContainer: {
-    width: "40vw"
+    width: "40vw",
+    "@media (max-width: 568px)": {
+      width: "80vw",
+    },
   },
   inputStyle: {
     width: "100%"
@@ -39,22 +45,24 @@ const useStyles = makeStyles(() => ({
     width: "40vw"
   },
   submitButton: {
-    backgroundColor: "#3A8DFF",
+    backgroundColor: theme.palette.primary.main,
     borderRadius: "3px",
+    color: theme.palette.white,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.submitButtonSize,
+    fontWeight: theme.typography.fontWeightBold,
     height: "56px",
+    textAlign: "center",
     width: "160px",
-    color: "#FFF",
-    font: "normal 700 16px/21px Open Sans",
-    textAlign: "center"
   },
 }));
 
 const FormCard = ({
-  firstInputProps = {},
+  firstInput = <></>,
   formTitle = "",
   isLogin = true,
   onSubmitForm = () => { },
-  secondInputProps = {},
+  secondInput = <></>,
   submitButtonText = ""
 }) => {
   const classes = useStyles();
@@ -98,24 +106,9 @@ const FormCard = ({
 
         {renderExtraInput()}
 
-        {renderInput(
-          <TextField
-            {...firstInputProps}
-          />
-        )}
+        {renderInput(firstInput)}
 
-        {renderInput(
-          <TextField
-            {...secondInputProps}
-            InputProps={{
-              endAdornment: isLogin ? (
-                <Button position="end" className={classes.forgotButton}>
-                  Forgot?
-                </Button>
-              ) : null,
-            }}
-          />
-        )}
+        {renderInput(secondInput)}
 
         <Grid className={classes.submitButtonContainer}>
           <Button

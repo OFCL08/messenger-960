@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import backgroundImage from "../../assets/bg-img.png";
 import bubbleImage from "../../assets/bubble.svg";
 
@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
   bubbleStyle: {
     height: "67px",
     left: "17%",
+    maxHeight: "67px",
+    maxWidth: "67px",
     position: "absolute",
     top: "27%",
     width: "67px",
@@ -17,24 +19,31 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     height: "100vh",
+    maxWidth: "40vw",
     width: "40vw"
   },
   container: {
     height: "100vh",
-    width: "40vw"
+    width: "40vw",
+    "@media (max-width: 568px)": {
+      display: "none"
+    },
   },
   overlay: {
-    background: "linear-gradient(180deg, #3A8DFF 0%, #86B9FF 100%)",
+    background: theme.palette.overlayBackground,
     height: "100vh",
     left: 0,
+    maxWidth: "40vw",
     opacity: 0.85,
     position: "absolute",
     top: 0,
     width: "40vw"
   },
   text: {
-    color: "#fff",
-    font: "normal 26px/40px Open Sans",
+    color: theme.palette.white,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSizeTitle,
+    fontWeight: theme.typography.fontWeightRegular,
     left: "10%",
     position: "absolute",
     textAlign: "center",
@@ -55,24 +64,28 @@ const SideBanner = () => {
 
   return (
     <Grid container className={classes.container}>
-      <img
+      <Box
         alt="Background"
-        src={backgroundImage}
         className={classes.image}
+        component="img"
+        src={backgroundImage}
       />
 
-      <div className={classes.overlay} />
+      <Box
+        className={classes.overlay}
+      />
 
-      <img
+      <Box
         alt="Bubble"
-        src={bubbleImage}
         className={classes.bubbleStyle}
+        component="img"
+        src={bubbleImage}
       />
 
-      <p className={classes.text}>
+      <Typography className={classes.text}>
         Converse with anyone
         with any language
-      </p>
+      </Typography>
     </Grid>
   );
 };

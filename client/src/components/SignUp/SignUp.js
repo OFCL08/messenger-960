@@ -1,10 +1,24 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 import { register } from "../../store/utils/thunkCreators";
-import { BaseContainer } from "../common/BaseContainer";
+import { Box, Grid, TextField } from "@material-ui/core";
+import { SideBanner } from "../common/SideBanner";
+import { TopBarRedirect } from "../common/TopBarRedirect";
+import { FormCard } from "../common/FormCard";
+
+const useStyles = makeStyles(() => ({
+  container: {
+    width: "60vw",
+    "@media (max-width: 568px)": {
+      width: "100vw",
+    },
+  },
+}));
 
 const SignUp = (props) => {
+  const classes = useStyles();
   const { user, register } = props;
 
   const handleRegister = async (event) => {
@@ -21,30 +35,43 @@ const SignUp = (props) => {
   }
 
   return (
-    <BaseContainer
-      isLogin={false}
-      topBarButtonText="Login"
-      topLegendText="Already have an account?"
-      topPath="/login"
-      firstInputProps={{
-        "aria-label": "e-mail address",
-        "label": "E-mail address",
-        "name": "email",
-        "type": "email",
-        "required": "true"
-      }}
-      secondInputProps={{
-        "aria- label": "password",
-        "label": "Password",
-        "name": "password",
-        "type": "password",
-        "inputProps": "{{ minLength: 6 }}",
-        "required": "true"
-      }}
-      formTitle="Create an account."
-      onSubmitForm={handleRegister}
-      submitButtonText="Create"
-    />
+    <Grid container>
+      <SideBanner />
+
+      <Box className={classes.container}>
+        <TopBarRedirect
+          buttonText="Login"
+          legendText="Already have an account?"
+          path="/login"
+        />
+
+        <FormCard
+          isLogin={false}
+          firstInput={(
+            <TextField
+              aria-label="e-mail address"
+              label="E-mail address"
+              name="email"
+              required
+              type="email"
+            />
+          )}
+          secondInput={(
+            <TextField
+              aria-label="password"
+              label="Password"
+              name="password"
+              type="password"
+              inputProps={{ minLength: 6 }}
+              required
+            />
+          )}
+          formTitle="Create an account."
+          onSubmitForm={handleRegister}
+          submitButtonText="Create"
+        />
+      </Box>
+    </Grid>
   );
 };
 

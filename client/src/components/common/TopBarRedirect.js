@@ -5,10 +5,16 @@ import { Button, Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   buttonStyle: {
-    color: "#3A8DFF",
-    font: "normal 600 14px/19px Open Sans",
-    marginLeft: 64,
-    textAlign: "center"
+    borderRadius: "5px",
+    boxShadow: "0px 2px 12px rgba(74, 106, 149, 0.2)",
+    color: theme.palette.primary.main,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightMedium,
+    height: "54px",
+    marginLeft: "30px",
+    textAlign: "center",
+    width: "140px"
   },
   row: {
     alignItems: "center",
@@ -18,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%"
   },
   legendText: {
-    color: "#B0B0B0",
-    font: "normal 400 14px/19px Open Sans",
+    color: theme.palette.secondary.main,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightRegular,
     textAlign: "center"
   },
 }));
