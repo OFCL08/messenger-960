@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     height: "100vh",
+    objectFit: "cover",
     maxWidth: "40vw",
     width: "40vw"
   },
@@ -50,12 +51,6 @@ const useStyles = makeStyles((theme) => ({
     top: "40%",
     whiteSpace: "pre-line",
     width: "19%",
-    wordBreak: "break-all",
-    "@media (max-width: 568px)": {
-      left: "5%",
-      width: "30%",
-      wordBreak: "normal"
-    },
   }
 }));
 
