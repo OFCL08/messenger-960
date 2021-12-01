@@ -1,4 +1,5 @@
 import axios from "axios";
+import { config } from "../../config/config";
 import socket from "../../socket";
 import {
   gotConversations,
@@ -75,7 +76,7 @@ export const fetchConversations = () => async (dispatch) => {
     const conversations = data.map((convo) => {
       const convoCopy = { ...convo };
       convoCopy.messages.sort((message, nextMessage) =>
-      Date.parse(message.createdAt) - Date.parse(nextMessage.createdAt));
+        Date.parse(message.createdAt) - Date.parse(nextMessage.createdAt));
       return convoCopy;
     });
     dispatch(gotConversations(conversations));
@@ -101,14 +102,41 @@ const sendMessage = (data, body) => {
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
   try {
-    const data = await saveMessage(body);
+    const bodyCopy = { ...body };
 
-    if (!body.conversationId) {
-      dispatch(addConversation(body.recipientId, data.message));
+    if (bodyCopy.attachments.length) {
+      const url = `https://api.cloudinary.com/v1_1/${config.cloud_name}/image/upload`;
+      bodyCopy.attachments = [];
+
+      for (let file of body.attachments) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", config.upload_preset);
+        formData.append("multiple", true);
+        const axiosConfig = {
+          url,
+          method: "POST",
+          data: formData,
+          transformRequest: (data, headers) => {
+            delete headers['x-access-token'];
+            return data;
+          }
+        };
+        const response = await axios(axiosConfig);
+        if (response && response.data) {
+          bodyCopy.attachments.push(response.data.secure_url);
+        }
+      }
+    }
+
+    const data = await saveMessage(bodyCopy);
+
+    if (!bodyCopy.conversationId) {
+      dispatch(addConversation(bodyCopy.recipientId, data.message));
     } else {
       dispatch(setNewMessage(data.message));
     }
-    sendMessage(data, body);
+    sendMessage(data, bodyCopy);
   } catch (error) {
     console.error(error);
   }
