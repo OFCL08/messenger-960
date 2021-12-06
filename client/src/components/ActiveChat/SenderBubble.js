@@ -31,11 +31,19 @@ const useStyles = makeStyles(() => ({
 const SenderBubble = (props) => {
   const classes = useStyles();
   const { images, time, text } = props;
+  let imagesStyle = { order: 1 };
+  let textStyle = { order: 2 };
+
+  if (images && images.length > 1) {
+    imagesStyle = { order: 2 };
+    textStyle = { order: 1 };
+  }
+
   return (
     <Box className={classes.root}>
       <Typography className={classes.date}>{time}</Typography>
-      <Attachments images={images} />
-      <Box className={classes.bubble}>
+      <Attachments images={images} attachStyles={imagesStyle} />
+      <Box className={classes.bubble} style={textStyle}>
         <Typography className={classes.text}>{text}</Typography>
       </Box>
     </Box>

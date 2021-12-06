@@ -103,6 +103,7 @@ const sendMessage = (data, body) => {
 export const postMessage = (body) => async (dispatch) => {
   try {
     const bodyCopy = { ...body };
+    let imagePromises = [];
 
     if (bodyCopy.attachments.length) {
       const url = `https://api.cloudinary.com/v1_1/${config.cloud_name}/image/upload`;
@@ -122,21 +123,24 @@ export const postMessage = (body) => async (dispatch) => {
             return data;
           }
         };
-        const response = await axios(axiosConfig);
-        if (response && response.data) {
-          bodyCopy.attachments.push(response.data.secure_url);
-        }
+        imagePromises.push(axios(axiosConfig));
       }
     }
 
-    const data = await saveMessage(bodyCopy);
+    Promise.all(imagePromises).then(async (results) => {
+      for (let result of results) {
+        bodyCopy.attachments.push(result.data.secure_url);
+      }
 
-    if (!bodyCopy.conversationId) {
-      dispatch(addConversation(bodyCopy.recipientId, data.message));
-    } else {
-      dispatch(setNewMessage(data.message));
-    }
-    sendMessage(data, bodyCopy);
+      const data = await saveMessage(bodyCopy);
+
+      if (!bodyCopy.conversationId) {
+        dispatch(addConversation(bodyCopy.recipientId, data.message));
+      } else {
+        dispatch(setNewMessage(data.message));
+      }
+      sendMessage(data, bodyCopy);
+    });
   } catch (error) {
     console.error(error);
   }

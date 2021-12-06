@@ -16,14 +16,15 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Attachments = ({ images = [] }) => {
+const Attachments = ({ images = [], attachStyles = { order: 1 } }) => {
   const classes = useStyles();
 
   if (images && images.length) {
     return (
-      <Grid className={classes.attachmentContainer}>
+      <Grid className={classes.attachmentContainer} style={attachStyles}>
         {images.map((image) => (
           <Image
+            key={image}
             cloudName={config.cloud_name}
             publicId={image}
             className={classes.image}
